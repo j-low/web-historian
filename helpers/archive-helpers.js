@@ -25,11 +25,41 @@ exports.initialize = function(pathsObj){
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(){
+exports.readListOfUrls = function(callback){
+  // read sites.txt file
+  fs.readFile(exports.paths.list, function(err, data){
+    if(err) {
+      console.log('READ_LIST ERROR: ', err);
+      return;
+    }
+    callback(data.toString());
+  });
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(url, list){
+  // iterate over list
+  list = list.split('\n');
+  var found = false;
+  list.forEach(function(listUrl) {
+    if( listUrl.match(url) ){
+      if( listUrl !== ''){
+        found = true;
+      }
+    }
+  });
+  console.log('found: ', found);
+  return found;
 };
+
+exports.getSiteData = function(url, callback){
+  fs.readFile(exports.paths.archivedSites+url, function(err, data){
+    if(err) {
+      console.log('GET_SITE_DATA ERROR: ', err);
+      return;
+    }
+    callback(data.toString());
+  });
+}
 
 exports.addUrlToList = function(){
 };
